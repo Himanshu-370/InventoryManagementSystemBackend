@@ -1,4 +1,4 @@
 package com.example.InventoryManagement.InventoryManagementServiceLayer;
 
-public class InventoryManagementServiceLayer {
+public class ProductService {
 }

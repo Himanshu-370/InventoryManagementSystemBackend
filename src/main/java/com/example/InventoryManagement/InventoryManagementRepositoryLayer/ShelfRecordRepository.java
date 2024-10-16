@@ -1,4 +1,4 @@
 package com.example.InventoryManagement.InventoryManagementRepositoryLayer;
 
-public class InventoryManagementRepositoryLayer {
+public class ShelfRecordRepository {
 }
