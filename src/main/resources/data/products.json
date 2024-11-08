@@ -1,0 +1,36 @@
+[
+    {
+        "id": 1,
+        "name": "Amoxicillin 500mg Capsules",
+        "code": "PRD-AMOX-500",
+        "description": "Antibiotic medication for bacterial infections",
+        "categoryId": 2,
+        "formulationId": 1,
+        "unitPrice": 12.99,
+        "packSize": 10,
+        "unit": "capsules",
+        "minimumStock": 100,
+        "reorderPoint": 150,
+        "status": "ACTIVE",
+        "manufacturer": "PharmaCorp Ltd",
+        "expiryPeriod": 24,
+        "storageConditions": "Store below 25°C in a dry place"
+    },
+    {
+        "id": 2,
+        "name": "Paracetamol 650mg Tablets",
+        "code": "PRD-PARA-650",
+        "description": "Pain relief and fever reduction medication",
+        "categoryId": 3,
+        "formulationId": 2,
+        "unitPrice": 8.99,
+        "packSize": 15,
+        "unit": "tablets",
+        "minimumStock": 200,
+        "reorderPoint": 250,
+        "status": "ACTIVE",
+        "manufacturer": "MediPharm Inc",
+        "expiryPeriod": 36,
+        "storageConditions": "Store at room temperature"
+    }
+]

@@ -1,0 +1,122 @@
+[
+    {
+        "id": 1,
+        "name": "Amoxicillin Trihydrate",
+        "quantity": 25.5,
+        "unit": "kg",
+        "price": 450.00,
+        "density": 1.21,
+        "priceAfterConversion": 450.00,
+        "lastUpdated": "2024-03-15T10:30:00",
+        "supplier": "ChemSupplies International",
+        "description": "Active pharmaceutical ingredient for antibiotics"
+    },
+    {
+        "id": 2,
+        "name": "Paracetamol",
+        "quantity": 45.0,
+        "unit": "kg",
+        "price": 280.00,
+        "density": 1.15,
+        "priceAfterConversion": 280.00,
+        "lastUpdated": "2024-03-14T15:45:00",
+        "supplier": "GlobalChem Ltd",
+        "description": "Active ingredient for pain relief medications"
+    },
+    {
+        "id": 3,
+        "name": "Microcrystalline Cellulose",
+        "quantity": 75.0,
+        "unit": "kg",
+        "price": 150.00,
+        "density": 1.55,
+        "priceAfterConversion": 150.00,
+        "lastUpdated": "2024-03-13T09:15:00",
+        "supplier": "ExcipientsPlus",
+        "description": "Binding agent for pharmaceutical formulations"
+    },
+    {
+        "id": 4,
+        "name": "Magnesium Stearate",
+        "quantity": 30.0,
+        "unit": "kg",
+        "price": 95.00,
+        "density": 1.03,
+        "priceAfterConversion": 95.00,
+        "lastUpdated": "2024-03-12T14:20:00",
+        "supplier": "PharmaChem Solutions",
+        "description": "Lubricant for tablet manufacturing"
+    },
+    {
+        "id": 5,
+        "name": "Starch",
+        "quantity": 100.0,
+        "unit": "kg",
+        "price": 75.00,
+        "density": 1.45,
+        "priceAfterConversion": 75.00,
+        "lastUpdated": "2024-03-11T11:30:00",
+        "supplier": "NaturalExcipients Co",
+        "description": "Disintegrant for tablet formulations"
+    },
+    {
+        "id": 6,
+        "name": "Titanium Dioxide",
+        "quantity": 15.0,
+        "unit": "kg",
+        "price": 180.00,
+        "density": 4.23,
+        "priceAfterConversion": 180.00,
+        "lastUpdated": "2024-03-10T16:45:00",
+        "supplier": "ColorChem Industries",
+        "description": "Coloring agent for tablet coating"
+    },
+    {
+        "id": 7,
+        "name": "Lactose Monohydrate",
+        "quantity": 60.0,
+        "unit": "kg",
+        "price": 120.00,
+        "density": 1.54,
+        "priceAfterConversion": 120.00,
+        "lastUpdated": "2024-03-09T13:15:00",
+        "supplier": "DairyChemicals Ltd",
+        "description": "Filler for tablet and capsule formulations"
+    },
+    {
+        "id": 8,
+        "name": "Povidone K30",
+        "quantity": 20.0,
+        "unit": "kg",
+        "price": 250.00,
+        "density": 1.18,
+        "priceAfterConversion": 250.00,
+        "lastUpdated": "2024-03-08T10:30:00",
+        "supplier": "BinderTech Solutions",
+        "description": "Binding agent for wet granulation"
+    },
+    {
+        "id": 9,
+        "name": "Croscarmellose Sodium",
+        "quantity": 25.0,
+        "unit": "kg",
+        "price": 195.00,
+        "density": 1.61,
+        "priceAfterConversion": 195.00,
+        "lastUpdated": "2024-03-07T14:45:00",
+        "supplier": "DisintegrantPro Inc",
+        "description": "Super disintegrant for rapid tablet dissolution"
+    },
+    {
+        "id": 10,
+        "name": "Colloidal Silicon Dioxide",
+        "quantity": 10.0,
+        "unit": "kg",
+        "price": 320.00,
+        "density": 2.20,
+        "priceAfterConversion": 320.00,
+        "lastUpdated": "2024-03-06T09:20:00",
+        "supplier": "FlowChem Corp",
+        "description": "Glidant for powder flow improvement"
+    }
+]

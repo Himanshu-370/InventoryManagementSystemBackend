@@ -1,6 +1,6 @@
-package com.example.InventoryManagement.InventoryManagementRepositoryLayer;
+package com.example.InventoryManagement.repository;
 
-import com.example.InventoryManagement.InventoryManagementModel.RawMaterial;
+import com.example.InventoryManagement.model.RawMaterial;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

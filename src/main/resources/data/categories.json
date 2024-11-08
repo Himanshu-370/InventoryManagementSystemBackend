@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "name": "Pharmaceuticals",
+        "description": "Medical drugs and compounds",
+        "parentCategoryId": null,
+        "active": true
+    },
+    {
+        "id": 2,
+        "name": "Antibiotics",
+        "description": "Medicines that combat bacterial infections",
+        "parentCategoryId": 1,
+        "active": true
+    },
+    {
+        "id": 3,
+        "name": "Pain Management",
+        "description": "Pain relief medications",
+        "parentCategoryId": 1,
+        "active": true
+    },
+    {
+        "id": 4,
+        "name": "Raw Materials",
+        "description": "Basic chemical compounds and ingredients",
+        "parentCategoryId": null,
+        "active": true
+    },
+    {
+        "id": 5,
+        "name": "Laboratory Supplies",
+        "description": "Equipment and materials for lab use",
+        "parentCategoryId": null,
+        "active": true
+    }
+]
