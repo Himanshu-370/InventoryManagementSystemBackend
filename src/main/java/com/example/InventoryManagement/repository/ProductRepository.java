@@ -1,12 +1,11 @@
 package com.example.InventoryManagement.repository;
 
 import com.example.InventoryManagement.model.Product;
+import com.example.InventoryManagement.service.JsonFileService;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,17 +14,21 @@ import java.util.stream.Collectors;
 @Repository
 public class ProductRepository {
 
-    private static final String DATA_FILE = "data/products.json";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String DATA_FILE = "classpath:data/products.json";
+    private final JsonFileService jsonFileService;
     private final Object fileLock = new Object();
+
+    @Autowired
+    public ProductRepository(JsonFileService jsonFileService) {
+        this.jsonFileService = jsonFileService;
+    }
 
     public List<Product> findAll() {
         synchronized (fileLock) {
-
             try {
-                return objectMapper.readValue(new File(DATA_FILE), new TypeReference<List<Product>>() {
+                return jsonFileService.readFromFile(DATA_FILE, new TypeReference<List<Product>>() {
                 });
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new ArrayList<>();
             }
@@ -34,17 +37,14 @@ public class ProductRepository {
 
     public List<Product> searchProducts(String query) {
         synchronized (fileLock) {
-                        
-                        
             try {
-                List<Product> products = objectMapper.readValue(new File(DATA_FILE), new TypeReference<List<Product>>() {
-                });
+                List<Product> products = findAll();
                 return products.stream()
                         .filter(product -> product.getName().toLowerCase().contains(query) ||
-                                           product.getDescription().toLowerCase().contains(query) ||
-                                           product.getSku().toLowerCase().contains(query))
+                                product.getDescription().toLowerCase().contains(query) ||
+                                product.getCode().toLowerCase().contains(query))
                         .collect(Collectors.toList());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new ArrayList<>();
             }
@@ -54,8 +54,8 @@ public class ProductRepository {
     public void saveAll(List<Product> products) {
         synchronized (fileLock) {
             try {
-                objectMapper.writeValue(new File(DATA_FILE), products);
-            } catch (IOException e) {
+                jsonFileService.writeToFile(DATA_FILE, products);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

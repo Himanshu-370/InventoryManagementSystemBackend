@@ -21,7 +21,7 @@ public class FormulationService {
     @Autowired
     private JsonFileService jsonFileService;
 
-    private final String DATA_FILE = "data/formulations.json";
+    private final String DATA_FILE = "classpath:data/formulations.json";
 
     public List<ProductFormulation> getFormulationsByProductId(Long productId) {
         return productService.getProductById(productId)

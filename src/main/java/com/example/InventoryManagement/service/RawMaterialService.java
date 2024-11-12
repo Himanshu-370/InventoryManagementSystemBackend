@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class RawMaterialService {
-    private final String DATA_FILE = "data/rawmaterials.json";
+    private final String DATA_FILE = "classpath:data/rawmaterials.json";
 
     @Autowired
     private JsonFileService jsonFileService;
