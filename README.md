@@ -48,33 +48,58 @@ A Spring Boot application designed to efficiently manage product inventory, raw 
 ## API Endpoints
 
 ### Categories
-- `GET /api/categories` - Retrieve all categories
-- `GET /api/categories/{id}` - Retrieve a category by ID
-- `POST /api/categories` - Create a new category
-- `PUT /api/categories/{id}` - Update an existing category
+#### Basic CRUD
+- `GET    /api/categories`                  - List all categories
+- `GET    /api/categories/{id}`             - Get specific category
+- `POST   /api/categories`                  - Create new category
+- `PUT    /api/categories/{id}`             - Update category
+- `DELETE /api/categories/{id}`             - Delete category
+
+#### Relationship endpoints
+- `GET    /api/categories/{id}/products`    - Get products in category
+- `POST   /api/categories/{id}/products`    - Add products to category
+- `DELETE /api/categories/{id}/products/{productId}`  - Remove product from category
 
 ### Products
-- `GET /api/products` - Retrieve all products
-- `GET /api/products/{id}` - Retrieve a product by ID
-- `GET /api/products/category/{categoryId}` - Retrieve products by category
-- `POST /api/products` - Create a new product
-- `PUT /api/products/{id}` - Update an existing product
+#### Basic CRUD
+- `GET    /api/products`                    - List all products
+- `GET    /api/products/{id}`              - Get specific product
+- `POST   /api/products`                   - Create new product
+- `PUT    /api/products/{id}`              - Update product
+- `DELETE /api/products/{id}`              - Delete product
+
+#### Relationship endpoints
+- `GET    /api/products/{id}/subcategories`     - Get subcategories of product
+- `POST   /api/products/{id}/subcategories`     - Add subcategories to product
+- `DELETE /api/products/{id}/subcategories/{subcategoryId}`  - Remove subcategory from product
+
+### Subcategories
+#### Basic CRUD
+- `GET    /api/subcategories`              - List all subcategories
+- `GET    /api/subcategories/{id}`         - Get specific subcategory
+- `POST   /api/subcategories`              - Create new subcategory
+- `PUT    /api/subcategories/{id}`         - Update subcategory
+- `DELETE /api/subcategories/{id}`         - Delete subcategory
+
+#### Relationship endpoints
+- `GET    /api/subcategories/{id}/materials`    - Get materials in subcategory
+- `POST   /api/subcategories/{id}/materials`    - Add materials to subcategory
+- `DELETE /api/subcategories/{id}/materials/{materialId}`  - Remove material from subcategory
+
 
 ### Raw Materials
-- `GET /api/rawmaterials` - Retrieve all raw materials
-- `GET /api/rawmaterials/{id}` - Retrieve a raw material by ID
-- `POST /api/rawmaterials` - Create a new raw material
-- `PUT /api/rawmaterials/{id}` - Update an existing raw material
-
-### Search
-- `GET /api/search/products/advanced` - Perform an advanced search for products
-- `GET /api/search/rawmaterials/advanced` - Perform an advanced search for raw materials
+#### Basic CRUD
+- `GET    /api/materials`                  - List all materials
+- `GET    /api/materials/{id}`             - Get specific material
+- `POST   /api/materials`                  - Create new material
+- `PUT    /api/materials/{id}`             - Update material
+- `DELETE /api/materials/{id}`             - Delete material
 
 ---
 
 ## Usage Examples
 
-### Creating a New Category
+#### Creating a New Category
 ```bash
 curl -X POST http://localhost:8080/api/categories \
 -H "Content-Type: application/json" \
@@ -82,7 +107,7 @@ curl -X POST http://localhost:8080/api/categories \
   "name": "Emulsions"
 }'
 ```
-### Creating a New Raw Material
+#### Creating a New Raw Material
 ```bash
 curl -X POST http://localhost:8080/api/rawmaterials \
 -H "Content-Type: application/json" \

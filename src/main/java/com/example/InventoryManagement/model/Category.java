@@ -1,10 +1,17 @@
 package com.example.InventoryManagement.model;
 
+import jakarta.persistence.*;
+import java.util.UUID;
+
+@Entity
+@Table(name = "categories")
 public class Category {
-    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
     private String description;
-    private Long parentCategoryId;
+    private UUID parentCategoryId;
     private boolean active;
 
     // Default constructor
@@ -12,11 +19,11 @@ public class Category {
     }
 
     // Getters and Setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -36,11 +43,11 @@ public class Category {
         this.description = description;
     }
 
-    public Long getParentCategoryId() {
+    public UUID getParentCategoryId() {
         return parentCategoryId;
     }
 
-    public void setParentCategoryId(Long parentCategoryId) {
+    public void setParentCategoryId(UUID parentCategoryId) {
         this.parentCategoryId = parentCategoryId;
     }
 
