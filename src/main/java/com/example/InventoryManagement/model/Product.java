@@ -3,14 +3,16 @@ package com.example.InventoryManagement.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String code;
     private String description;
-    private Long categoryId;
     private Long formulationId;
     private double unitPrice;
     private int packSize;
@@ -24,6 +26,11 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductFormulation> formulations;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonBackReference
+    private Category category;
 
     // Default constructor
     public Product() {
@@ -60,14 +67,6 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
     }
 
     public Long getFormulationId() {
@@ -156,5 +155,13 @@ public class Product {
 
     public void setFormulations(List<ProductFormulation> formulations) {
         this.formulations = formulations;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

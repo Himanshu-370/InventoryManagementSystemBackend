@@ -1,6 +1,7 @@
 package com.example.InventoryManagement.controller;
 
 import com.example.InventoryManagement.model.Category;
+import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -70,6 +71,50 @@ public class CategoryController {
         try {
             boolean deleted = categoryService.deleteCategory(id);
             if (deleted) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/categories/{id}/products")
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable UUID id) {
+        try {
+            List<Product> products = categoryService.getProductsByCategory(id);
+            if (products.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/categories/{id}/products")
+    public ResponseEntity<Product> addProductToCategory(@PathVariable UUID id, @RequestBody Product product) {
+        try {
+            System.out.println("Received request to add product to category: " + id);
+            System.out.println("Product data: " + product.toString());
+
+            Product addedProduct = categoryService.addProductToCategory(id, product);
+            if (addedProduct != null) {
+                return new ResponseEntity<>(addedProduct, HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            System.err.println("Error adding product to category: " + e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/categories/{id}/products/{productId}")
+    public ResponseEntity<HttpStatus> removeProductFromCategory(@PathVariable UUID id, @PathVariable UUID productId) {
+        try {
+            boolean removed = categoryService.removeProductFromCategory(id, productId);
+            if (removed) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/formulations")
@@ -23,13 +24,13 @@ public class FormulationController {
     }
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<List<ProductFormulation>> getFormulationsByProductId(@PathVariable Long productId) {
+    public ResponseEntity<List<ProductFormulation>> getFormulationsByProductId(@PathVariable UUID productId) {
         return ResponseEntity.ok(formulationService.getFormulationsByProductId(productId));
     }
 
     @PutMapping("/product/{productId}")
     public ResponseEntity<Product> updateFormulations(
-            @PathVariable Long productId,
+            @PathVariable UUID productId,
             @RequestBody List<ProductFormulation> formulations) {
         return ResponseEntity.ok(formulationService.updateFormulations(productId, formulations));
     }

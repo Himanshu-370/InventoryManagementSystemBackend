@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FormulationService {
@@ -23,13 +24,13 @@ public class FormulationService {
 
     private final String DATA_FILE = "classpath:data/formulations.json";
 
-    public List<ProductFormulation> getFormulationsByProductId(Long productId) {
+    public List<ProductFormulation> getFormulationsByProductId(UUID productId) {
         return productService.getProductById(productId)
                 .map(Product::getFormulations)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
-    public Product updateFormulations(Long productId, List<ProductFormulation> formulations) {
+    public Product updateFormulations(UUID productId, List<ProductFormulation> formulations) {
         Product product = productService.getProductById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 

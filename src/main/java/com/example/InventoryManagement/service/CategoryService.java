@@ -1,25 +1,25 @@
 package com.example.InventoryManagement.service;
 
 import com.example.InventoryManagement.model.Category;
+import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.repository.CategoryRepository;
-
-import lombok.extern.slf4j.Slf4j;
+import com.example.InventoryManagement.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Slf4j
 public class CategoryService {
-    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
-    }
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
@@ -39,6 +39,32 @@ public class CategoryService {
             return categoryRepository.save(category);
         }
         return null;
+    }
+
+    public List<Product> getProductsByCategory(UUID id) {
+        return categoryRepository.findById(id)
+                .map(Category::getProducts)
+                .orElse(Collections.emptyList());
+    }
+
+    public Product addProductToCategory(UUID categoryId, Product product) {
+        return categoryRepository.findById(categoryId)
+                .map(category -> {
+                    product.setCategory(category);
+                    return productRepository.save(product);
+                })
+                .orElse(null);
+    }
+
+    public boolean removeProductFromCategory(UUID categoryId, UUID productId) {
+        return categoryRepository.findById(categoryId)
+                .flatMap(_ -> productRepository.findById(productId))
+                .map(product -> {
+                    product.setCategory(null);
+                    productRepository.save(product);
+                    return true;
+                })
+                .orElse(false);
     }
 
     public boolean deleteCategory(UUID id) {

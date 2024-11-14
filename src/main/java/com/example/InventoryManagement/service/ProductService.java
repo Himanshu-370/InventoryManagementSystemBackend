@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -15,7 +16,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     public List<Product> searchProducts(String query) {
-        return productRepository.searchProducts(query.toLowerCase());
+        return productRepository.findByNameContainingIgnoreCase(query);
     }
 
     public List<Product> getAllProducts() {
@@ -26,7 +27,7 @@ public class ProductService {
         productRepository.saveAll(products);
     }
 
-    public Optional<Product> getProductById(Long id) {
+    public Optional<Product> getProductById(UUID id) {
         return productRepository.findById(id);
     }
 
