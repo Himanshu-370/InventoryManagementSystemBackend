@@ -4,6 +4,9 @@ import com.example.InventoryManagement.model.Category;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.repository.CategoryRepository;
 import com.example.InventoryManagement.repository.ProductRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,12 +51,14 @@ public class CategoryService {
     }
 
     public Product addProductToCategory(UUID categoryId, Product product) {
-        return categoryRepository.findById(categoryId)
-                .map(category -> {
-                    product.setCategory(category);
-                    return productRepository.save(product);
-                })
-                .orElse(null);
+        Optional<Category> categoryOpt = categoryRepository.findById(categoryId);
+        if (categoryOpt.isPresent()) {
+            Category category = categoryOpt.get();
+            product.setCategory(category);
+            return productRepository.save(product);
+        } else {
+            throw new EntityNotFoundException("Category not found");
+        }
     }
 
     public boolean removeProductFromCategory(UUID categoryId, UUID productId) {

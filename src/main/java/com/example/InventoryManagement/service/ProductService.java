@@ -34,4 +34,12 @@ public class ProductService {
     public Product saveProduct(Product product) {
         return productRepository.save(product);
     }
+
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+
+    public Optional<Product> findById(UUID id) {
+        return productRepository.findById(id);
+    }
 }
