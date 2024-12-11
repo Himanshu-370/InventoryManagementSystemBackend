@@ -49,24 +49,24 @@ A Spring Boot application designed to efficiently manage product inventory, raw 
 
 ### Categories
 #### Basic CRUD
-- `GET    /api/categories`                  - List all categories
-- `GET    /api/categories/{id}`             - Get specific category
-- `POST   /api/categories`                  - Create new category
-- `PUT    /api/categories/{id}`             - Update category
-- `DELETE /api/categories/{id}`             - Delete category
+- `GET    /api/categories`                  - List all categories  - Done
+- `GET    /api/categories/{id}`             - Get specific category  - Done
+- `POST   /api/categories`                  - Create new category  - Done
+- `PUT    /api/categories/{id}`             - Update category  - Done
+- `DELETE /api/categories/{id}`             - Delete category  - Done
 
 #### Relationship endpoints
-- `GET    /api/categories/{id}/products`    - Get products in category
-- `POST   /api/categories/{id}/products`    - Add products to category
-- `DELETE /api/categories/{id}/products/{productId}`  - Remove product from category
+- `GET    /api/categories/{id}/products`    - Get products in category  - Done
+- `POST   /api/categories/{id}/products`    - Add products to category  - Done
+- `DELETE /api/categories/{id}/products/{productId}`  - Remove product from category  - Done
 
 ### Products
 #### Basic CRUD
-- `GET    /api/products`                    - List all products
-- `GET    /api/products/{id}`              - Get specific product
-- `POST   /api/products`                   - Create new product
-- `PUT    /api/products/{id}`              - Update product
-- `DELETE /api/products/{id}`              - Delete product
+- `GET    /api/products`                    - List all products  - Done
+- `GET    /api/products/{id}`              - Get specific product  - Done
+- `POST   /api/products`                   - Create new product  - Done
+- `PUT    /api/products/{id}`              - Update product  - Done
+- `DELETE /api/products/{id}`              - Delete product  - Done
 
 #### Relationship endpoints
 - `GET    /api/products/{id}/subcategories`     - Get subcategories of product

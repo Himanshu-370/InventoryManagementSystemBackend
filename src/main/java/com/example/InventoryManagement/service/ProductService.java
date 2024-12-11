@@ -1,5 +1,6 @@
 package com.example.InventoryManagement.service;
 
+import com.example.InventoryManagement.model.Category;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +16,37 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> searchProducts(String query) {
-        return productRepository.findByNameContainingIgnoreCase(query);
-    }
+    // public List<Product> searchProducts(String query) {
+    // // return productRepository.findByNameContainingIgnoreCase(query);
+    // }
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
-    public void saveProducts(List<Product> products) {
-        productRepository.saveAll(products);
+    public Product createProduct(Product Product) {
+        return productRepository.save(Product);
     }
+
+    public Product updateProduct(UUID id, Product Product) {
+        if (productRepository.existsById(id)) {
+            Product.setId(id);
+            return productRepository.save(Product);
+        }
+        return null;
+    }
+
+    public boolean deleteProduct(UUID id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    // public void saveProducts(List<Product> products) {
+    // productRepository.saveAll(products);
+    // }
 
     public Optional<Product> getProductById(UUID id) {
         return productRepository.findById(id);
@@ -35,11 +56,11 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    public List<Product> findAll() {
-        return productRepository.findAll();
-    }
+    // public List<Product> findAll() {
+    // return productRepository.findAll();
+    // }
 
-    public Optional<Product> findById(UUID id) {
-        return productRepository.findById(id);
-    }
+    // public Optional<Product> findById(UUID id) {
+    // return productRepository.findById(id);
+    // }
 }
