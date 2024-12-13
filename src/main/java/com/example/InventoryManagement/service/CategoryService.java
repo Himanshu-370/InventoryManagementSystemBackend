@@ -1,7 +1,11 @@
 package com.example.InventoryManagement.service;
 
+import com.example.InventoryManagement.dto.CategoryDTO;
+import com.example.InventoryManagement.dto.ProductDTO;
+import com.example.InventoryManagement.dto.SubcategoryDTO;
 import com.example.InventoryManagement.model.Category;
 import com.example.InventoryManagement.model.Product;
+import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.repository.CategoryRepository;
 import com.example.InventoryManagement.repository.ProductRepository;
 
@@ -14,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -24,22 +29,27 @@ public class CategoryService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        return categoryRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Category> getCategoryById(UUID id) {
-        return categoryRepository.findById(id);
+    public Optional<CategoryDTO> getCategoryById(UUID id) {
+        return categoryRepository.findById(id)
+                .map(this::convertToDTO);
     }
 
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO createCategory(Category category) {
+        Category savedCategory = categoryRepository.save(category);
+        return convertToDTO(savedCategory);
     }
 
-    public Category updateCategory(UUID id, Category category) {
+    public CategoryDTO updateCategory(UUID id, Category category) {
         if (categoryRepository.existsById(id)) {
             category.setId(id);
-            return categoryRepository.save(category);
+            Category updatedCategory = categoryRepository.save(category);
+            return convertToDTO(updatedCategory);
         }
         return null;
     }
@@ -52,18 +62,22 @@ public class CategoryService {
         return false;
     }
 
-    public List<Product> getProductsByCategory(UUID id) {
+    public List<ProductDTO> getProductsByCategory(UUID id) {
         return categoryRepository.findById(id)
                 .map(Category::getProducts)
-                .orElse(Collections.emptyList());
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(this::convertToProductDTO)
+                .collect(Collectors.toList());
     }
 
-    public Product addProductToCategory(UUID categoryId, Product product) {
+    public ProductDTO addProductToCategory(UUID categoryId, Product product) {
         Optional<Category> categoryOpt = categoryRepository.findById(categoryId);
         if (categoryOpt.isPresent()) {
             Category category = categoryOpt.get();
             product.setCategory(category);
-            return productRepository.save(product);
+            Product savedProduct = productRepository.save(product);
+            return convertToProductDTO(savedProduct);
         } else {
             throw new EntityNotFoundException("Category not found");
         }
@@ -71,15 +85,56 @@ public class CategoryService {
 
     public boolean removeProductFromCategory(UUID categoryId, UUID productId) {
         return categoryRepository.findById(categoryId)
-                .flatMap(category -> productRepository.findById(productId))
-                .map(product -> {
-                    product.setCategory(null);
-                    productRepository.save(product);
-                    return true;
-                })
+                .flatMap(category -> productRepository.findById(productId)
+                        .map(product -> {
+                            product.setCategory(null);
+                            productRepository.save(product);
+                            return true;
+                        }))
                 .orElse(false);
     }
-}
 
-// Product ---- Subcategory
-// Category ---- Product
+    private CategoryDTO convertToDTO(Category category) {
+        List<ProductDTO> productDTOs = category.getProducts().stream()
+                .map(this::convertToProductDTO)
+                .collect(Collectors.toList());
+
+        return new CategoryDTO(
+                category.getId(),
+                category.getName(),
+                category.getDescription(),
+                category.isActive(),
+                productDTOs);
+    }
+
+    private ProductDTO convertToProductDTO(Product product) {
+        List<SubcategoryDTO> subcategoryDTOs = product.getSubcategories().stream()
+                .map(this::convertToSubcategoryDTO)
+                .collect(Collectors.toList());
+
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getCode(),
+                product.getDescription(),
+                product.getUnitPrice(),
+                product.getPackSize(),
+                product.getUnit(),
+                product.getMinimumStock(),
+                product.getReorderPoint(),
+                product.getStatus(),
+                product.getManufacturer(),
+                product.getExpiryPeriod(),
+                product.getStorageConditions(),
+                product.getCategory() != null ? product.getCategory().getId() : null,
+                subcategoryDTOs);
+    }
+
+    private SubcategoryDTO convertToSubcategoryDTO(Subcategory subcategory) {
+        return new SubcategoryDTO(
+                subcategory.getId(),
+                subcategory.getName(),
+                subcategory.getProduct().getId(),
+                subcategory.getCategory().getId());
+    }
+}

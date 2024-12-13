@@ -1,11 +1,14 @@
 package com.example.InventoryManagement.controller;
 
+import com.example.InventoryManagement.dto.CategoryDTO;
+import com.example.InventoryManagement.dto.ProductDTO;
 import com.example.InventoryManagement.model.Category;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,16 +16,16 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@Validated
 public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
 
     @GetMapping("/categories")
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
         try {
-            List<Category> categories = categoryService.getAllCategories();
+            List<CategoryDTO> categories = categoryService.getAllCategories();
             if (categories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -33,7 +36,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable UUID id) {
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable UUID id) {
         try {
             return categoryService.getCategoryById(id)
                     .map(category -> new ResponseEntity<>(category, HttpStatus.OK))
@@ -44,9 +47,9 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody Category category) {
         try {
-            Category newCategory = categoryService.createCategory(category);
+            CategoryDTO newCategory = categoryService.createCategory(category);
             return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,9 +57,9 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable UUID id, @RequestBody Category category) {
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable UUID id, @RequestBody Category category) {
         try {
-            Category updatedCategory = categoryService.updateCategory(id, category);
+            CategoryDTO updatedCategory = categoryService.updateCategory(id, category);
             if (updatedCategory != null) {
                 return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
             }
@@ -80,9 +83,9 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{id}/products")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable UUID id) {
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID id) {
         try {
-            List<Product> products = categoryService.getProductsByCategory(id);
+            List<ProductDTO> products = categoryService.getProductsByCategory(id);
             if (products.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -93,19 +96,14 @@ public class CategoryController {
     }
 
     @PostMapping("/categories/{id}/products")
-    public ResponseEntity<Product> addProductToCategory(@PathVariable UUID id, @RequestBody Product product) {
+    public ResponseEntity<ProductDTO> addProductToCategory(@PathVariable UUID id, @RequestBody Product product) {
         try {
-            System.out.println("Received request to add product to category: " + id);
-            System.out.println("Product data: " + product.toString());
-
-            Product addedProduct = categoryService.addProductToCategory(id, product);
+            ProductDTO addedProduct = categoryService.addProductToCategory(id, product);
             if (addedProduct != null) {
                 return new ResponseEntity<>(addedProduct, HttpStatus.CREATED);
             }
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            System.err.println("Error adding product to category: " + e.getMessage());
-            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

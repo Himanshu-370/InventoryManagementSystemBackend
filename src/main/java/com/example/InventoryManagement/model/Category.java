@@ -19,7 +19,7 @@ public class Category {
     private UUID parentCategoryId;
     private boolean active;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Product> products;
 

@@ -1,5 +1,7 @@
 package com.example.InventoryManagement.controller;
 
+import com.example.InventoryManagement.dto.ProductDTO;
+import com.example.InventoryManagement.dto.SubcategoryDTO;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.model.Product;
@@ -45,9 +47,9 @@ public class ProductController {
     // }
 
     @GetMapping("/product")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<ProductDTO>> getAllProducts() {
         try {
-            List<Product> products = productService.getAllProducts();
+            List<ProductDTO> products = productService.getAllProducts();
             if (products.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -69,9 +71,9 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseEntity<Product> createProduct(@RequestBody Product Product) {
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product Product) {
         try {
-            Product newProduct = productService.createProduct(Product);
+            ProductDTO newProduct = productService.createProduct(Product);
             return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -79,9 +81,9 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable UUID id, @RequestBody Product Product) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody Product Product) {
         try {
-            Product updatedProduct = productService.updateProduct(id, Product);
+            ProductDTO updatedProduct = productService.updateProduct(id, Product);
             if (updatedProduct != null) {
                 return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
             }
@@ -105,9 +107,9 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}/subcategories")
-    public ResponseEntity<List<Subcategory>> getSubcategories(@PathVariable UUID id) {
+    public ResponseEntity<List<SubcategoryDTO>> getSubcategories(@PathVariable UUID id) {
         try {
-            List<Subcategory> subcategories = productService.getSubcategoriesByProductId(id);
+            List<SubcategoryDTO> subcategories = productService.getSubcategoriesByProductId(id);
             if (subcategories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -118,9 +120,9 @@ public class ProductController {
     }
 
     @PostMapping("/products/{id}/subcategories")
-    public ResponseEntity<Subcategory> addSubcategory(@PathVariable UUID id, @RequestBody Subcategory subcategory) {
+    public ResponseEntity<SubcategoryDTO> addSubcategory(@PathVariable UUID id, @RequestBody Subcategory subcategory) {
         try {
-            Subcategory newSubcategory = productService.addSubcategoryToProduct(id, subcategory);
+            SubcategoryDTO newSubcategory = productService.addSubcategoryToProduct(id, subcategory);
             return new ResponseEntity<>(newSubcategory, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

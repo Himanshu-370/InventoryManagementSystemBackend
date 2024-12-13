@@ -1,5 +1,7 @@
 package com.example.InventoryManagement.service;
 
+import com.example.InventoryManagement.dto.ProductDTO;
+import com.example.InventoryManagement.dto.SubcategoryDTO;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.repository.ProductRepository;
@@ -14,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -24,22 +27,22 @@ public class ProductService {
     @Autowired
     private SubcategoryRepository subcategoryRepository;
 
-    // public List<Product> searchProducts(String query) {
-    // // return productRepository.findByNameContainingIgnoreCase(query);
-    // }
-
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDTO> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Product createProduct(Product Product) {
-        return productRepository.save(Product);
+    public ProductDTO createProduct(Product product) {
+        Product savedProduct = productRepository.save(product);
+        return convertToDTO(savedProduct);
     }
 
-    public Product updateProduct(UUID id, Product Product) {
+    public ProductDTO updateProduct(UUID id, Product product) {
         if (productRepository.existsById(id)) {
-            Product.setId(id);
-            return productRepository.save(Product);
+            product.setId(id);
+            Product updatedProduct = productRepository.save(product);
+            return convertToDTO(updatedProduct);
         }
         return null;
     }
@@ -52,10 +55,6 @@ public class ProductService {
         return false;
     }
 
-    // public void saveProducts(List<Product> products) {
-    // productRepository.saveAll(products);
-    // }
-
     public Optional<Product> getProductById(UUID id) {
         return productRepository.findById(id);
     }
@@ -64,54 +63,22 @@ public class ProductService {
         return productRepository.save(product);
     }
 
-    // public List<Product> findAll() {
-    // return productRepository.findAll();
-    // }
-
-    // public Optional<Product> findById(UUID id) {
-    // return productRepository.findById(id);
-    // }
-
-    public List<Subcategory> getProductsBySubCategory(UUID id) {
-        return productRepository.findById(id)
-                .map(Product::getSubcategories)
-                .orElse(Collections.emptyList());
-    }
-
-    public Subcategory addProductToSubCategory(UUID productId, Subcategory subcategory) {
-        Optional<Product> productOpt = productRepository.findById(productId);
-        if (productOpt.isPresent()) {
-            Product product = productOpt.get();
-            subcategory.setProduct(product);
-            return subcategoryRepository.save(subcategory);
-        } else {
-            throw new EntityNotFoundException("Subcategory not found");
-        }
-    }
-
-    public boolean removeSubCategoryFromProduct(UUID productId, UUID subcategoryId) {
-        return subcategoryRepository.findById(productId)
-                .flatMap(subcategory -> subcategoryRepository.findById(subcategoryId))
-                .map(subcategory -> {
-                    subcategory.setProduct(null);
-                    subcategoryRepository.save(subcategory);
-                    return true;
-                })
-                .orElse(false);
-    }
-
-    public List<Subcategory> getSubcategoriesByProductId(UUID productId) {
+    public List<SubcategoryDTO> getSubcategoriesByProductId(UUID productId) {
         return productRepository.findById(productId)
                 .map(Product::getSubcategories)
-                .orElse(Collections.emptyList());
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(this::convertToSubcategoryDTO)
+                .collect(Collectors.toList());
     }
 
-    public Subcategory addSubcategoryToProduct(UUID productId, Subcategory subcategory) {
+    public SubcategoryDTO addSubcategoryToProduct(UUID productId, Subcategory subcategory) {
         Optional<Product> productOpt = productRepository.findById(productId);
         if (productOpt.isPresent()) {
             Product product = productOpt.get();
             subcategory.setProduct(product);
-            return subcategoryRepository.save(subcategory);
+            Subcategory savedSubcategory = subcategoryRepository.save(subcategory);
+            return convertToSubcategoryDTO(savedSubcategory);
         } else {
             throw new EntityNotFoundException("Product not found");
         }
@@ -127,4 +94,34 @@ public class ProductService {
                 .orElse(false);
     }
 
+    private ProductDTO convertToDTO(Product product) {
+        List<SubcategoryDTO> subcategoryDTOs = product.getSubcategories().stream()
+                .map(this::convertToSubcategoryDTO)
+                .collect(Collectors.toList());
+
+        return new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getCode(),
+                product.getDescription(),
+                product.getUnitPrice(),
+                product.getPackSize(),
+                product.getUnit(),
+                product.getMinimumStock(),
+                product.getReorderPoint(),
+                product.getStatus(),
+                product.getManufacturer(),
+                product.getExpiryPeriod(),
+                product.getStorageConditions(),
+                product.getCategory() != null ? product.getCategory().getId() : null,
+                subcategoryDTOs);
+    }
+
+    private SubcategoryDTO convertToSubcategoryDTO(Subcategory subcategory) {
+        return new SubcategoryDTO(
+                subcategory.getId(),
+                subcategory.getName(),
+                subcategory.getProduct().getId(),
+                subcategory.getCategory().getId());
+    }
 }
