@@ -25,6 +25,8 @@ public class Product {
     private int expiryPeriod;
     private String storageConditions;
 
+    private List<Subcategory> subcategories;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductFormulation> formulations;
 
@@ -164,5 +166,13 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public List<Subcategory> getSubcategories() {
+        return subcategories;
+    }
+
+    public void setSubcategories(List<Subcategory> subcategories) {
+        this.subcategories = subcategories;
     }
 }

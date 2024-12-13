@@ -1,6 +1,7 @@
 package com.example.InventoryManagement.controller;
 
 import com.example.InventoryManagement.model.Product;
+import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,42 @@ public class ProductController {
     public ResponseEntity<HttpStatus> deleteProduct(@PathVariable UUID id) {
         try {
             boolean deleted = productService.deleteProduct(id);
+            if (deleted) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/products/{id}/subcategories")
+    public ResponseEntity<List<Subcategory>> getSubcategories(@PathVariable UUID id) {
+        try {
+            List<Subcategory> subcategories = productService.getProductsBySubCategory(id);
+            if (subcategories.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(subcategories, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/products/{id}/subcategories")
+    public ResponseEntity<Subcategory> addSubcategory(@PathVariable UUID id, @RequestBody Subcategory subcategory) {
+        try {
+            Subcategory newSubcategory = productService.addProductToSubCategory(id, subcategory);
+            return new ResponseEntity<>(newSubcategory, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/products/{id}/subcategories/{subcategoryId}")
+    public ResponseEntity<HttpStatus> removeSubcategory(@PathVariable UUID id, @PathVariable UUID subcategoryId) {
+        try {
+            boolean deleted = productService.removeSubCategoryFromProduct(id, subcategoryId);
             if (deleted) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }

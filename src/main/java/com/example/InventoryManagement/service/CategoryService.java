@@ -44,6 +44,14 @@ public class CategoryService {
         return null;
     }
 
+    public boolean deleteCategory(UUID id) {
+        if (categoryRepository.existsById(id)) {
+            categoryRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     public List<Product> getProductsByCategory(UUID id) {
         return categoryRepository.findById(id)
                 .map(Category::getProducts)
@@ -71,12 +79,7 @@ public class CategoryService {
                 })
                 .orElse(false);
     }
-
-    public boolean deleteCategory(UUID id) {
-        if (categoryRepository.existsById(id)) {
-            categoryRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
 }
+
+// Product ---- Subcategory
+// Category ---- Product
