@@ -20,12 +20,11 @@ public class Subcategory {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    public Subcategory(UUID id, String name, Category category) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
+    // Default constructor
+    public Subcategory() {
     }
 
+    // Getters and Setters
     public UUID getId() {
         return id;
     }

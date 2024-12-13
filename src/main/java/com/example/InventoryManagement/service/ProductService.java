@@ -1,6 +1,5 @@
 package com.example.InventoryManagement.service;
 
-import com.example.InventoryManagement.model.Category;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.repository.ProductRepository;
@@ -92,7 +91,34 @@ public class ProductService {
 
     public boolean removeSubCategoryFromProduct(UUID productId, UUID subcategoryId) {
         return subcategoryRepository.findById(productId)
-                .flatMap(_ -> subcategoryRepository.findById(subcategoryId))
+                .flatMap(subcategory -> subcategoryRepository.findById(subcategoryId))
+                .map(subcategory -> {
+                    subcategory.setProduct(null);
+                    subcategoryRepository.save(subcategory);
+                    return true;
+                })
+                .orElse(false);
+    }
+
+    public List<Subcategory> getSubcategoriesByProductId(UUID productId) {
+        return productRepository.findById(productId)
+                .map(Product::getSubcategories)
+                .orElse(Collections.emptyList());
+    }
+
+    public Subcategory addSubcategoryToProduct(UUID productId, Subcategory subcategory) {
+        Optional<Product> productOpt = productRepository.findById(productId);
+        if (productOpt.isPresent()) {
+            Product product = productOpt.get();
+            subcategory.setProduct(product);
+            return subcategoryRepository.save(subcategory);
+        } else {
+            throw new EntityNotFoundException("Product not found");
+        }
+    }
+
+    public boolean removeSubcategoryFromProduct(UUID productId, UUID subcategoryId) {
+        return subcategoryRepository.findById(subcategoryId)
                 .map(subcategory -> {
                     subcategory.setProduct(null);
                     subcategoryRepository.save(subcategory);

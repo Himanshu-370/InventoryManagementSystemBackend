@@ -71,7 +71,7 @@ public class CategoryService {
 
     public boolean removeProductFromCategory(UUID categoryId, UUID productId) {
         return categoryRepository.findById(categoryId)
-                .flatMap(_ -> productRepository.findById(productId))
+                .flatMap(category -> productRepository.findById(productId))
                 .map(product -> {
                     product.setCategory(null);
                     productRepository.save(product);

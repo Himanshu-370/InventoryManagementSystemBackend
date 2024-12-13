@@ -25,6 +25,7 @@ public class Product {
     private int expiryPeriod;
     private String storageConditions;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Subcategory> subcategories;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

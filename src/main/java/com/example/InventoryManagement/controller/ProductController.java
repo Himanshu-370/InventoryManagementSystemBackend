@@ -107,7 +107,7 @@ public class ProductController {
     @GetMapping("/products/{id}/subcategories")
     public ResponseEntity<List<Subcategory>> getSubcategories(@PathVariable UUID id) {
         try {
-            List<Subcategory> subcategories = productService.getProductsBySubCategory(id);
+            List<Subcategory> subcategories = productService.getSubcategoriesByProductId(id);
             if (subcategories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -120,7 +120,7 @@ public class ProductController {
     @PostMapping("/products/{id}/subcategories")
     public ResponseEntity<Subcategory> addSubcategory(@PathVariable UUID id, @RequestBody Subcategory subcategory) {
         try {
-            Subcategory newSubcategory = productService.addProductToSubCategory(id, subcategory);
+            Subcategory newSubcategory = productService.addSubcategoryToProduct(id, subcategory);
             return new ResponseEntity<>(newSubcategory, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -130,7 +130,7 @@ public class ProductController {
     @DeleteMapping("/products/{id}/subcategories/{subcategoryId}")
     public ResponseEntity<HttpStatus> removeSubcategory(@PathVariable UUID id, @PathVariable UUID subcategoryId) {
         try {
-            boolean deleted = productService.removeSubCategoryFromProduct(id, subcategoryId);
+            boolean deleted = productService.removeSubcategoryFromProduct(id, subcategoryId);
             if (deleted) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
