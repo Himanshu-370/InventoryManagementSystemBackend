@@ -1,8 +1,14 @@
 package com.example.InventoryManagement.service;
 
 import com.example.InventoryManagement.dto.SubcategoryDTO;
+import com.example.InventoryManagement.model.Category;
+import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.model.Subcategory;
+import com.example.InventoryManagement.repository.ProductRepository;
 import com.example.InventoryManagement.repository.SubcategoryRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +23,8 @@ public class SubcategoryService {
     @Autowired
     private SubcategoryRepository subcategoryRepository;
 
+    private ProductRepository productRepository;
+
     public List<SubcategoryDTO> getAllSubcategories() {
         return subcategoryRepository.findAll().stream()
                 .map(this::convertToDTO)
@@ -28,10 +36,18 @@ public class SubcategoryService {
                 .map(this::convertToDTO);
     }
 
-    public SubcategoryDTO createSubcategory(Subcategory subcategory) {
-        Subcategory savedSubcategory = subcategoryRepository.save(subcategory);
-        return convertToDTO(savedSubcategory);
-    }
+    // public SubcategoryDTO createSubcategory(SubcategoryDTO subcategoryDTO) {
+    // Subcategory subcategory = new Subcategory();
+    // subcategory.setId(UUID.randomUUID());
+    // subcategory.setName(subcategoryDTO.getName());
+    // Product product = productRepository.findById(subcategoryDTO.getProductId())
+    // .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+    // subcategory.setProduct(product);
+    // Category category = new Category();
+    // category.setId(subcategoryDTO.getCategoryId());
+    // subcategory.setCategory(category);
+    // return convertToDTO(subcategory);
+    // }
 
     public SubcategoryDTO updateSubcategory(UUID id, Subcategory subcategory) {
         if (subcategoryRepository.existsById(id)) {
@@ -42,12 +58,11 @@ public class SubcategoryService {
         return null;
     }
 
-    public boolean deleteSubcategory(UUID id) {
-        if (subcategoryRepository.existsById(id)) {
-            subcategoryRepository.deleteById(id);
-            return true;
+    public void deleteSubcategory(UUID id) {
+        if (!subcategoryRepository.existsById(id)) {
+            throw new EntityNotFoundException("Subcategory not found with ID: " + id);
         }
-        return false;
+        subcategoryRepository.deleteById(id);
     }
 
     private SubcategoryDTO convertToDTO(Subcategory subcategory) {

@@ -47,12 +47,11 @@ public class ProductService {
         return null;
     }
 
-    public boolean deleteProduct(UUID id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return true;
+    public void deleteProduct(UUID id) {
+        if (!productRepository.existsById(id)) {
+            throw new EntityNotFoundException("Product not found with ID: " + id);
         }
-        return false;
+        productRepository.deleteById(id);
     }
 
     public Optional<Product> getProductById(UUID id) {
@@ -84,14 +83,20 @@ public class ProductService {
         }
     }
 
-    public boolean removeSubcategoryFromProduct(UUID productId, UUID subcategoryId) {
-        return subcategoryRepository.findById(subcategoryId)
-                .map(subcategory -> {
-                    subcategory.setProduct(null);
-                    subcategoryRepository.save(subcategory);
-                    return true;
-                })
-                .orElse(false);
+    public void deleteSubcategoryFromProduct(UUID productId, UUID subcategoryId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
+
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID: " + subcategoryId));
+
+        if (product.getSubcategories().remove(subcategory)) {
+            productRepository.save(product);
+            subcategoryRepository.delete(subcategory);
+
+        } else {
+            throw new EntityNotFoundException("Subcategory not associated with product with ID: " + productId);
+        }
     }
 
     private ProductDTO convertToDTO(Product product) {

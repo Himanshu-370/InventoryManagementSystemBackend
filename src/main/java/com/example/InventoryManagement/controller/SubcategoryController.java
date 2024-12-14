@@ -3,6 +3,9 @@ package com.example.InventoryManagement.controller;
 import com.example.InventoryManagement.dto.SubcategoryDTO;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.service.SubcategoryService;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,18 +47,22 @@ public class SubcategoryController {
         }
     }
 
-    @PostMapping("/subcategories")
-    public ResponseEntity<SubcategoryDTO> createSubcategory(@RequestBody Subcategory subcategory) {
-        try {
-            SubcategoryDTO newSubcategory = subcategoryService.createSubcategory(subcategory);
-            return new ResponseEntity<>(newSubcategory, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    // @PostMapping("/subcategories")
+    // public ResponseEntity<SubcategoryDTO> createSubcategory(@RequestBody
+    // SubcategoryDTO subcategoryDTO) {
+    // try {
+    // SubcategoryDTO newSubcategory =
+    // subcategoryService.createSubcategory(subcategoryDTO);
+    // return new ResponseEntity<>(newSubcategory, HttpStatus.CREATED);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
 
     @PutMapping("/subcategories/{id}")
-    public ResponseEntity<SubcategoryDTO> updateSubcategory(@PathVariable UUID id, @RequestBody Subcategory subcategory) {
+    public ResponseEntity<SubcategoryDTO> updateSubcategory(@PathVariable UUID id,
+            @RequestBody Subcategory subcategory) {
         try {
             SubcategoryDTO updatedSubcategory = subcategoryService.updateSubcategory(id, subcategory);
             if (updatedSubcategory != null) {
@@ -68,14 +75,14 @@ public class SubcategoryController {
     }
 
     @DeleteMapping("/subcategories/{id}")
-    public ResponseEntity<HttpStatus> deleteSubcategory(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteSubcategory(@PathVariable UUID id) {
         try {
-            boolean deleted = subcategoryService.deleteSubcategory(id);
-            if (deleted) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+            subcategoryService.deleteSubcategory(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

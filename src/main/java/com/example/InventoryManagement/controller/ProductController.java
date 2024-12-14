@@ -6,6 +6,9 @@ import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.service.ProductService;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,29 +25,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    // @GetMapping("/search")
-    // public ResponseEntity<List<Product>> searchProducts(@RequestParam String
-    // query) {
-    // if (query == null || query.trim().isEmpty()) {
-    // return ResponseEntity.badRequest().build();
-    // }
-    // // List<Product> results = productService.searchProducts(query);
-    // return ResponseEntity.ok(results);
-    // }
-
-    // @GetMapping
-    // public ResponseEntity<List<Product>> getAllProducts() {
-    // List<Product> products = productService.getAllProducts();
-    // return ResponseEntity.ok(products);
-    // }
-
-    // @PostMapping
-    // public ResponseEntity<Void> saveProducts(@RequestBody List<Product> products)
-    // {
-    // productService.saveProducts(products);
-    // return ResponseEntity.ok().build();
-    // }
 
     @GetMapping("/product")
     public ResponseEntity<List<ProductDTO>> getAllProducts() {
@@ -94,14 +74,14 @@ public class ProductController {
     }
 
     @DeleteMapping("/product/{id}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         try {
-            boolean deleted = productService.deleteProduct(id);
-            if (deleted) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+            productService.deleteProduct(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -129,15 +109,16 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/products/{id}/subcategories/{subcategoryId}")
-    public ResponseEntity<HttpStatus> removeSubcategory(@PathVariable UUID id, @PathVariable UUID subcategoryId) {
+    @DeleteMapping("/products/{productId}/subcategories/{subcategoryId}")
+    public ResponseEntity<Void> deleteSubcategoryFromProduct(@PathVariable UUID productId,
+            @PathVariable UUID subcategoryId) {
         try {
-            boolean deleted = productService.removeSubcategoryFromProduct(id, subcategoryId);
-            if (deleted) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+            productService.deleteSubcategoryFromProduct(productId, subcategoryId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

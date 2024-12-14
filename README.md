@@ -69,17 +69,17 @@ A Spring Boot application designed to efficiently manage product inventory, raw 
 - `DELETE /api/products/{id}`              - Delete product  - Done
 
 #### Relationship endpoints
-- `GET    /api/products/{id}/subcategories`     - Get subcategories of product
-- `POST   /api/products/{id}/subcategories`     - Add subcategories to product
-- `DELETE /api/products/{id}/subcategories/{subcategoryId}`  - Remove subcategory from product
+- `GET    /api/products/{id}/subcategories`     - Get subcategories of product - Done
+- `POST   /api/products/{id}/subcategories`     - Add subcategories to product - Done
+- `DELETE /api/products/{id}/subcategories/{subcategoryId}`  - Remove subcategory from product - Done
 
 ### Subcategories
 #### Basic CRUD
-- `GET    /api/subcategories`              - List all subcategories
-- `GET    /api/subcategories/{id}`         - Get specific subcategory
-- `POST   /api/subcategories`              - Create new subcategory
-- `PUT    /api/subcategories/{id}`         - Update subcategory
-- `DELETE /api/subcategories/{id}`         - Delete subcategory
+- `GET    /api/subcategories`              - List all subcategories - Done
+- `GET    /api/subcategories/{id}`         - Get specific subcategory - Done
+- `POST   /api/subcategories`              - Create new subcategory - Done
+- `PUT    /api/subcategories/{id}`         - Update subcategory - Done
+- `DELETE /api/subcategories/{id}`         - Delete subcategory - Done
 
 #### Relationship endpoints
 - `GET    /api/subcategories/{id}/materials`    - Get materials in subcategory
