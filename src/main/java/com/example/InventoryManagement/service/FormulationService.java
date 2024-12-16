@@ -36,7 +36,7 @@ public class FormulationService {
 
         // Validate raw materials exist
         formulations.forEach(f -> {
-            rawMaterialService.getRawMaterialById(f.getRawMaterialId())
+            rawMaterialService.getRawMaterialById(UUID.fromString(f.getRawMaterialId().toString()))
                     .orElseThrow(
                             () -> new ResourceNotFoundException("Raw material not found: " + f.getRawMaterialId()));
         });

@@ -1,6 +1,7 @@
 package com.example.InventoryManagement.controller;
 
 import com.example.InventoryManagement.dto.SubcategoryDTO;
+import com.example.InventoryManagement.model.RawMaterial;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.service.SubcategoryService;
 
@@ -83,6 +84,40 @@ public class SubcategoryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/subcategories/{id}/rawmaterials")
+    public ResponseEntity<List<RawMaterial>> getMaterialsInSubcategory(@PathVariable UUID id) {
+        try {
+            List<RawMaterial> materials = subcategoryService.getMaterialsInSubcategory(id);
+            if (materials.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(materials, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/subcategories/{id}/rawmaterials")
+    public ResponseEntity<RawMaterial> addMaterialToSubcategory(@PathVariable UUID id,
+            @RequestBody RawMaterial material) {
+        try {
+            RawMaterial addedMaterial = subcategoryService.addMaterialToSubcategory(id, material);
+            return new ResponseEntity<>(addedMaterial, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/subcategories/{id}/rawmaterials/{rawmaterialId}")
+    public ResponseEntity<Void> removeMaterialFromSubcategory(@PathVariable UUID id, @PathVariable UUID materialId) {
+        try {
+            subcategoryService.removeMaterialFromSubcategory(id, materialId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

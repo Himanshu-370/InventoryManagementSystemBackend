@@ -3,6 +3,7 @@ package com.example.InventoryManagement.service;
 import com.example.InventoryManagement.dto.CategoryDTO;
 import com.example.InventoryManagement.dto.ProductDTO;
 import com.example.InventoryManagement.dto.SubcategoryDTO;
+import com.example.InventoryManagement.exception.ResourceNotFoundException;
 import com.example.InventoryManagement.model.Category;
 import com.example.InventoryManagement.model.Product;
 import com.example.InventoryManagement.model.Subcategory;
@@ -81,6 +82,31 @@ public class CategoryService {
         } else {
             throw new EntityNotFoundException("Category not found");
         }
+    }
+
+    public ProductDTO updateProductToCategory(UUID categoryId, UUID productId, Product productDetails) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        if (!product.getCategory().getId().equals(category.getId())) {
+            throw new IllegalArgumentException("Product does not belong to the specified category");
+        }
+
+        product.setName(productDetails.getName());
+        product.setCode(productDetails.getCode());
+        product.setDescription(productDetails.getDescription());
+        product.setFormulationId(productDetails.getFormulationId());
+        product.setUnitPrice(productDetails.getUnitPrice());
+        product.setPackSize(productDetails.getPackSize());
+        product.setUnit(productDetails.getUnit());
+        product.setMinimumStock(productDetails.getMinimumStock());
+        product.setReorderPoint(productDetails.getReorderPoint());
+
+        Product updatedProduct = productRepository.save(product);
+        return convertToProductDTO(updatedProduct);
     }
 
     public boolean removeProductFromCategory(UUID categoryId, UUID productId) {

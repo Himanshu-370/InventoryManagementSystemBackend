@@ -89,11 +89,11 @@ A Spring Boot application designed to efficiently manage product inventory, raw 
 
 ### Raw Materials
 #### Basic CRUD
-- `GET    /api/materials`                  - List all materials
-- `GET    /api/materials/{id}`             - Get specific material
-- `POST   /api/materials`                  - Create new material
-- `PUT    /api/materials/{id}`             - Update material
-- `DELETE /api/materials/{id}`             - Delete material
+- `GET    /api/rawmaterials`                  - List all rawmaterials
+- `GET    /api/rawmaterials/{id}`             - Get specific material
+- `POST   /api/rawmaterials`                  - Create new material
+- `PUT    /api/rawmaterials/{id}`             - Update material
+- `DELETE /api/rawmaterials/{id}`             - Delete material
 
 ---
 

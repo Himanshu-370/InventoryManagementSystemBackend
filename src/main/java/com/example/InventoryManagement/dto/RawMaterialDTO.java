@@ -1,17 +1,10 @@
-package com.example.InventoryManagement.model;
+package com.example.InventoryManagement.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "rawmaterials")
-public class RawMaterial {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class RawMaterialDTO {
     private UUID id;
-
     private String name;
     private double quantity;
     private String unit;
@@ -21,13 +14,7 @@ public class RawMaterial {
     private LocalDateTime lastUpdated;
     private String supplier;
     private String description;
-
-    @Column(name = "subcategory_id")
     private UUID subcategoryId;
-
-    // Default constructor
-    public RawMaterial() {
-    }
 
     // Getters and Setters
     public UUID getId() {

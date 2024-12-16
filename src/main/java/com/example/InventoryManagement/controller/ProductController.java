@@ -109,7 +109,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/products/{productId}/subcategories/{subcategoryId}")
+    @DeleteMapping("/{productId}/subcategories/{subcategoryId}")
     public ResponseEntity<Void> deleteSubcategoryFromProduct(@PathVariable UUID productId,
             @PathVariable UUID subcategoryId) {
         try {

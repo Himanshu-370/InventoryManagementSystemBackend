@@ -1,10 +1,10 @@
 package com.example.InventoryManagement.service;
 
 import com.example.InventoryManagement.dto.SubcategoryDTO;
-import com.example.InventoryManagement.model.Category;
-import com.example.InventoryManagement.model.Product;
+import com.example.InventoryManagement.model.RawMaterial;
 import com.example.InventoryManagement.model.Subcategory;
 import com.example.InventoryManagement.repository.ProductRepository;
+import com.example.InventoryManagement.repository.RawMaterialRepository;
 import com.example.InventoryManagement.repository.SubcategoryRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,7 +23,8 @@ public class SubcategoryService {
     @Autowired
     private SubcategoryRepository subcategoryRepository;
 
-    private ProductRepository productRepository;
+    @Autowired
+    private RawMaterialRepository rawMaterialRepository;
 
     public List<SubcategoryDTO> getAllSubcategories() {
         return subcategoryRepository.findAll().stream()
@@ -71,5 +72,19 @@ public class SubcategoryService {
                 subcategory.getName(),
                 subcategory.getProduct().getId(),
                 subcategory.getCategory().getId());
+    }
+
+    public List<RawMaterial> getMaterialsInSubcategory(UUID subcategoryId) {
+        return rawMaterialRepository.findBySubcategoryId(subcategoryId);
+    }
+
+    public RawMaterial addMaterialToSubcategory(UUID subcategoryId, RawMaterial material) {
+        material.setSubcategoryId(subcategoryId);
+        return rawMaterialRepository.save(material);
+    }
+
+    public void removeMaterialFromSubcategory(UUID subcategoryId, UUID materialId) {
+        Optional<RawMaterial> material = rawMaterialRepository.findByIdAndSubcategoryId(materialId, subcategoryId);
+        material.ifPresent(rawMaterialRepository::delete);
     }
 }

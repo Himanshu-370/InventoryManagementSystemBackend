@@ -108,6 +108,21 @@ public class CategoryController {
         }
     }
 
+    // PUT method for ("/categories/{id}/products/{productId}")
+    @PutMapping("/categories/{id}/products/{productId}")
+    public ResponseEntity<ProductDTO> updateProductToCategory(@PathVariable UUID id, @PathVariable UUID productId,
+            @RequestBody Product product) {
+        try {
+            ProductDTO updatedProduct = categoryService.updateProductToCategory(id, productId, product);
+            if (updatedProduct != null) {
+                return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/categories/{id}/products/{productId}")
     public ResponseEntity<HttpStatus> removeProductFromCategory(@PathVariable UUID id, @PathVariable UUID productId) {
         try {
