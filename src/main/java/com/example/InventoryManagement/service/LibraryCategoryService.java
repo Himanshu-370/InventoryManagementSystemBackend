@@ -1,14 +1,14 @@
 package com.example.InventoryManagement.service;
 
-import com.example.InventoryManagement.dto.CategoryDTO;
-import com.example.InventoryManagement.dto.ProductDTO;
-import com.example.InventoryManagement.dto.SubcategoryDTO;
+import com.example.InventoryManagement.dto.LibraryCategoryDTO;
+import com.example.InventoryManagement.dto.LibraryProductDTO;
+import com.example.InventoryManagement.dto.ProductComponentDTO;
 import com.example.InventoryManagement.exception.ResourceNotFoundException;
-import com.example.InventoryManagement.model.Category;
-import com.example.InventoryManagement.model.Product;
-import com.example.InventoryManagement.model.Subcategory;
-import com.example.InventoryManagement.repository.CategoryRepository;
-import com.example.InventoryManagement.repository.ProductRepository;
+import com.example.InventoryManagement.model.LibraryCategory;
+import com.example.InventoryManagement.model.LibraryProduct;
+import com.example.InventoryManagement.model.ProductComponent;
+import com.example.InventoryManagement.repository.LibraryCategoryRepository;
+import com.example.InventoryManagement.repository.LibraryProductRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -22,34 +22,34 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryService {
+public class LibraryCategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private LibraryCategoryRepository categoryRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private LibraryProductRepository productRepository;
 
-    public List<CategoryDTO> getAllCategories() {
+    public List<LibraryCategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<CategoryDTO> getCategoryById(UUID id) {
+    public Optional<LibraryCategoryDTO> getCategoryById(UUID id) {
         return categoryRepository.findById(id)
                 .map(this::convertToDTO);
     }
 
-    public CategoryDTO createCategory(Category category) {
-        Category savedCategory = categoryRepository.save(category);
+    public LibraryCategoryDTO createCategory(LibraryCategory category) {
+        LibraryCategory savedCategory = categoryRepository.save(category);
         return convertToDTO(savedCategory);
     }
 
-    public CategoryDTO updateCategory(UUID id, Category category) {
+    public LibraryCategoryDTO updateCategory(UUID id, LibraryCategory category) {
         if (categoryRepository.existsById(id)) {
             category.setId(id);
-            Category updatedCategory = categoryRepository.save(category);
+            LibraryCategory updatedCategory = categoryRepository.save(category);
             return convertToDTO(updatedCategory);
         }
         return null;
@@ -63,32 +63,32 @@ public class CategoryService {
         return false;
     }
 
-    public List<ProductDTO> getProductsByCategory(UUID id) {
+    public List<LibraryProductDTO> getProductsByCategory(UUID id) {
         return categoryRepository.findById(id)
-                .map(Category::getProducts)
+                .map(LibraryCategory::getProducts)
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(this::convertToProductDTO)
                 .collect(Collectors.toList());
     }
 
-    public ProductDTO addProductToCategory(UUID categoryId, Product product) {
-        Optional<Category> categoryOpt = categoryRepository.findById(categoryId);
+    public LibraryProductDTO addProductToCategory(UUID categoryId, LibraryProduct product) {
+        Optional<LibraryCategory> categoryOpt = categoryRepository.findById(categoryId);
         if (categoryOpt.isPresent()) {
-            Category category = categoryOpt.get();
+            LibraryCategory category = categoryOpt.get();
             product.setCategory(category);
-            Product savedProduct = productRepository.save(product);
+            LibraryProduct savedProduct = productRepository.save(product);
             return convertToProductDTO(savedProduct);
         } else {
             throw new EntityNotFoundException("Category not found");
         }
     }
 
-    public ProductDTO updateProductToCategory(UUID categoryId, UUID productId, Product productDetails) {
-        Category category = categoryRepository.findById(categoryId)
+    public LibraryProductDTO updateProductToCategory(UUID categoryId, UUID productId, LibraryProduct productDetails) {
+        LibraryCategory category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-        Product product = productRepository.findById(productId)
+        LibraryProduct product = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         if (!product.getCategory().getId().equals(category.getId())) {
@@ -105,7 +105,7 @@ public class CategoryService {
         product.setMinimumStock(productDetails.getMinimumStock());
         product.setReorderPoint(productDetails.getReorderPoint());
 
-        Product updatedProduct = productRepository.save(product);
+        LibraryProduct updatedProduct = productRepository.save(product);
         return convertToProductDTO(updatedProduct);
     }
 
@@ -120,12 +120,12 @@ public class CategoryService {
                 .orElse(false);
     }
 
-    private CategoryDTO convertToDTO(Category category) {
-        List<ProductDTO> productDTOs = category.getProducts().stream()
+    private LibraryCategoryDTO convertToDTO(LibraryCategory category) {
+        List<LibraryProductDTO> productDTOs = category.getProducts().stream()
                 .map(this::convertToProductDTO)
                 .collect(Collectors.toList());
 
-        return new CategoryDTO(
+        return new LibraryCategoryDTO(
                 category.getId(),
                 category.getName(),
                 category.getDescription(),
@@ -133,12 +133,12 @@ public class CategoryService {
                 productDTOs);
     }
 
-    private ProductDTO convertToProductDTO(Product product) {
-        List<SubcategoryDTO> subcategoryDTOs = product.getSubcategories().stream()
+    private LibraryProductDTO convertToProductDTO(LibraryProduct product) {
+        List<ProductComponentDTO> subcategoryDTOs = product.getSubcategories().stream()
                 .map(this::convertToSubcategoryDTO)
                 .collect(Collectors.toList());
 
-        return new ProductDTO(
+        return new LibraryProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getCode(),
@@ -156,8 +156,8 @@ public class CategoryService {
                 subcategoryDTOs);
     }
 
-    private SubcategoryDTO convertToSubcategoryDTO(Subcategory subcategory) {
-        return new SubcategoryDTO(
+    private ProductComponentDTO convertToSubcategoryDTO(ProductComponent subcategory) {
+        return new ProductComponentDTO(
                 subcategory.getId(),
                 subcategory.getName(),
                 subcategory.getProduct().getId(),

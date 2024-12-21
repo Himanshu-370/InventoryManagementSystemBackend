@@ -1,11 +1,11 @@
 package com.example.InventoryManagement.service;
 
-import com.example.InventoryManagement.dto.ProductDTO;
-import com.example.InventoryManagement.dto.SubcategoryDTO;
-import com.example.InventoryManagement.model.Product;
-import com.example.InventoryManagement.model.Subcategory;
-import com.example.InventoryManagement.repository.ProductRepository;
-import com.example.InventoryManagement.repository.SubcategoryRepository;
+import com.example.InventoryManagement.dto.LibraryProductDTO;
+import com.example.InventoryManagement.dto.ProductComponentDTO;
+import com.example.InventoryManagement.model.LibraryProduct;
+import com.example.InventoryManagement.model.ProductComponent;
+import com.example.InventoryManagement.repository.LibraryProductRepository;
+import com.example.InventoryManagement.repository.ProductComponentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -19,29 +19,29 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductService {
+public class LibraryProductService {
 
     @Autowired
-    private ProductRepository productRepository;
+    private LibraryProductRepository productRepository;
 
     @Autowired
-    private SubcategoryRepository subcategoryRepository;
+    private ProductComponentRepository subcategoryRepository;
 
-    public List<ProductDTO> getAllProducts() {
+    public List<LibraryProductDTO> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public ProductDTO createProduct(Product product) {
-        Product savedProduct = productRepository.save(product);
+    public LibraryProductDTO createProduct(LibraryProduct product) {
+        LibraryProduct savedProduct = productRepository.save(product);
         return convertToDTO(savedProduct);
     }
 
-    public ProductDTO updateProduct(UUID id, Product product) {
+    public LibraryProductDTO updateProduct(UUID id, LibraryProduct product) {
         if (productRepository.existsById(id)) {
             product.setId(id);
-            Product updatedProduct = productRepository.save(product);
+            LibraryProduct updatedProduct = productRepository.save(product);
             return convertToDTO(updatedProduct);
         }
         return null;
@@ -54,29 +54,29 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public Optional<Product> getProductById(UUID id) {
+    public Optional<LibraryProduct> getProductById(UUID id) {
         return productRepository.findById(id);
     }
 
-    public Product saveProduct(Product product) {
+    public LibraryProduct saveProduct(LibraryProduct product) {
         return productRepository.save(product);
     }
 
-    public List<SubcategoryDTO> getSubcategoriesByProductId(UUID productId) {
+    public List<ProductComponentDTO> getSubcategoriesByProductId(UUID productId) {
         return productRepository.findById(productId)
-                .map(Product::getSubcategories)
+                .map(LibraryProduct::getSubcategories)
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(this::convertToSubcategoryDTO)
                 .collect(Collectors.toList());
     }
 
-    public SubcategoryDTO addSubcategoryToProduct(UUID productId, Subcategory subcategory) {
-        Optional<Product> productOpt = productRepository.findById(productId);
+    public ProductComponentDTO addSubcategoryToProduct(UUID productId, ProductComponent subcategory) {
+        Optional<LibraryProduct> productOpt = productRepository.findById(productId);
         if (productOpt.isPresent()) {
-            Product product = productOpt.get();
+            LibraryProduct product = productOpt.get();
             subcategory.setProduct(product);
-            Subcategory savedSubcategory = subcategoryRepository.save(subcategory);
+            ProductComponent savedSubcategory = subcategoryRepository.save(subcategory);
             return convertToSubcategoryDTO(savedSubcategory);
         } else {
             throw new EntityNotFoundException("Product not found");
@@ -84,10 +84,10 @@ public class ProductService {
     }
 
     public void deleteSubcategoryFromProduct(UUID productId, UUID subcategoryId) {
-        Product product = productRepository.findById(productId)
+        LibraryProduct product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
 
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId)
+        ProductComponent subcategory = subcategoryRepository.findById(subcategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Subcategory not found with ID: " + subcategoryId));
 
         if (product.getSubcategories().remove(subcategory)) {
@@ -99,12 +99,12 @@ public class ProductService {
         }
     }
 
-    private ProductDTO convertToDTO(Product product) {
-        List<SubcategoryDTO> subcategoryDTOs = product.getSubcategories().stream()
+    private LibraryProductDTO convertToDTO(LibraryProduct product) {
+        List<ProductComponentDTO> subcategoryDTOs = product.getSubcategories().stream()
                 .map(this::convertToSubcategoryDTO)
                 .collect(Collectors.toList());
 
-        return new ProductDTO(
+        return new LibraryProductDTO(
                 product.getId(),
                 product.getName(),
                 product.getCode(),
@@ -122,8 +122,8 @@ public class ProductService {
                 subcategoryDTOs);
     }
 
-    private SubcategoryDTO convertToSubcategoryDTO(Subcategory subcategory) {
-        return new SubcategoryDTO(
+    private ProductComponentDTO convertToSubcategoryDTO(ProductComponent subcategory) {
+        return new ProductComponentDTO(
                 subcategory.getId(),
                 subcategory.getName(),
                 subcategory.getProduct().getId(),

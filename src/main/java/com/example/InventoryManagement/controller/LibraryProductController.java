@@ -1,11 +1,10 @@
 package com.example.InventoryManagement.controller;
 
-import com.example.InventoryManagement.dto.ProductDTO;
-import com.example.InventoryManagement.dto.SubcategoryDTO;
-import com.example.InventoryManagement.model.Product;
-import com.example.InventoryManagement.model.Subcategory;
-import com.example.InventoryManagement.model.Product;
-import com.example.InventoryManagement.service.ProductService;
+import com.example.InventoryManagement.dto.LibraryProductDTO;
+import com.example.InventoryManagement.dto.ProductComponentDTO;
+import com.example.InventoryManagement.model.LibraryProduct;
+import com.example.InventoryManagement.model.ProductComponent;
+import com.example.InventoryManagement.service.LibraryProductService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -22,15 +21,15 @@ import java.util.UUID;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
 @Validated
-public class ProductController {
+public class LibraryProductController {
 
     @Autowired
-    private ProductService productService;
+    private LibraryProductService productService;
 
-    @GetMapping("/product")
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
+    @GetMapping("/library-products")
+    public ResponseEntity<List<LibraryProductDTO>> getAllProducts() {
         try {
-            List<ProductDTO> products = productService.getAllProducts();
+            List<LibraryProductDTO> products = productService.getAllProducts();
             if (products.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -40,8 +39,8 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getCategoryById(@PathVariable UUID id) {
+    @GetMapping("/library-products/{id}")
+    public ResponseEntity<LibraryProduct> getCategoryById(@PathVariable UUID id) {
         try {
             return productService.getProductById(id)
                     .map(category -> new ResponseEntity<>(category, HttpStatus.OK))
@@ -51,20 +50,20 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/product")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody Product Product) {
+    @PostMapping("/library-products")
+    public ResponseEntity<LibraryProductDTO> createProduct(@RequestBody LibraryProduct Product) {
         try {
-            ProductDTO newProduct = productService.createProduct(Product);
+            LibraryProductDTO newProduct = productService.createProduct(Product);
             return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/product/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @RequestBody Product Product) {
+    @PutMapping("/library-products/{id}")
+    public ResponseEntity<LibraryProductDTO> updateProduct(@PathVariable UUID id, @RequestBody LibraryProduct Product) {
         try {
-            ProductDTO updatedProduct = productService.updateProduct(id, Product);
+            LibraryProductDTO updatedProduct = productService.updateProduct(id, Product);
             if (updatedProduct != null) {
                 return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
             }
@@ -73,8 +72,8 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @DeleteMapping("/product/{id}")
+    
+    @DeleteMapping("/library-products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         try {
             productService.deleteProduct(id);
@@ -87,10 +86,10 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/{id}/subcategories")
-    public ResponseEntity<List<SubcategoryDTO>> getSubcategories(@PathVariable UUID id) {
+    @GetMapping("/library-products/{id}/product-components")
+    public ResponseEntity<List<ProductComponentDTO>> getSubcategories(@PathVariable UUID id) {
         try {
-            List<SubcategoryDTO> subcategories = productService.getSubcategoriesByProductId(id);
+            List<ProductComponentDTO> subcategories = productService.getSubcategoriesByProductId(id);
             if (subcategories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -100,17 +99,17 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/products/{id}/subcategories")
-    public ResponseEntity<SubcategoryDTO> addSubcategory(@PathVariable UUID id, @RequestBody Subcategory subcategory) {
+    @PostMapping("/library-products/{id}/product-components")
+    public ResponseEntity<ProductComponentDTO> addSubcategory(@PathVariable UUID id, @RequestBody ProductComponent subcategory) {
         try {
-            SubcategoryDTO newSubcategory = productService.addSubcategoryToProduct(id, subcategory);
+            ProductComponentDTO newSubcategory = productService.addSubcategoryToProduct(id, subcategory);
             return new ResponseEntity<>(newSubcategory, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/{productId}/subcategories/{subcategoryId}")
+    @DeleteMapping("/library-products/{id}/product-components/{componentId}")
     public ResponseEntity<Void> deleteSubcategoryFromProduct(@PathVariable UUID productId,
             @PathVariable UUID subcategoryId) {
         try {

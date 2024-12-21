@@ -3,19 +3,19 @@ package com.example.InventoryManagement.dto;
 import java.util.List;
 import java.util.UUID;
 
-public class CategoryDTO {
+public class LibraryCategoryDTO {
     private UUID id;
     private String name;
     private String description;
     private boolean active;
-    private List<ProductDTO> products;
+    private List<LibraryProductDTO> products;
 
     // Default constructor
-    public CategoryDTO() {
+    public LibraryCategoryDTO() {
     }
 
     // Constructor to initialize fields
-    public CategoryDTO(UUID id, String name, String description, boolean active, List<ProductDTO> products) {
+    public LibraryCategoryDTO(UUID id, String name, String description, boolean active, List<LibraryProductDTO> products) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -56,11 +56,11 @@ public class CategoryDTO {
         this.active = active;
     }
 
-    public List<ProductDTO> getProducts() {
+    public List<LibraryProductDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductDTO> products) {
+    public void setProducts(List<LibraryProductDTO> products) {
         this.products = products;
     }
 }

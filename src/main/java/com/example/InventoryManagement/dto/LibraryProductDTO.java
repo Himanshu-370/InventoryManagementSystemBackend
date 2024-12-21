@@ -3,7 +3,7 @@ package com.example.InventoryManagement.dto;
 import java.util.List;
 import java.util.UUID;
 
-public class ProductDTO {
+public class LibraryProductDTO {
     private UUID id;
     private String name;
     private String code;
@@ -18,16 +18,16 @@ public class ProductDTO {
     private int expiryPeriod;
     private String storageConditions;
     private UUID categoryId;
-    private List<SubcategoryDTO> subcategories;
+    private List<ProductComponentDTO> subcategories;
 
     // Default constructor
-    public ProductDTO() {
+    public LibraryProductDTO() {
     }
 
     // Constructor to initialize fields
-    public ProductDTO(UUID id, String name, String code, String description, double unitPrice, int packSize,
+    public LibraryProductDTO(UUID id, String name, String code, String description, double unitPrice, int packSize,
             String unit, int minimumStock, int reorderPoint, String status, String manufacturer, int expiryPeriod,
-            String storageConditions, UUID categoryId, List<SubcategoryDTO> subcategories) {
+            String storageConditions, UUID categoryId, List<ProductComponentDTO> subcategories) {
         this.id = id;
         this.name = name;
         this.code = code;
@@ -158,11 +158,11 @@ public class ProductDTO {
         this.categoryId = categoryId;
     }
 
-    public List<SubcategoryDTO> getSubcategories() {
+    public List<ProductComponentDTO> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(List<SubcategoryDTO> subcategories) {
+    public void setSubcategories(List<ProductComponentDTO> subcategories) {
         this.subcategories = subcategories;
     }
 }
