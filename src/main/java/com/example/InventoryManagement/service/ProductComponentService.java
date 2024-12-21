@@ -1,11 +1,11 @@
 package com.example.InventoryManagement.service;
 
-import com.example.InventoryManagement.dto.SubcategoryDTO;
+import com.example.InventoryManagement.dto.ProductComponentDTO;
 import com.example.InventoryManagement.model.RawMaterial;
-import com.example.InventoryManagement.model.Subcategory;
-import com.example.InventoryManagement.repository.ProductRepository;
+import com.example.InventoryManagement.model.ProductComponent;
+import com.example.InventoryManagement.repository.LibraryProductRepository;
 import com.example.InventoryManagement.repository.RawMaterialRepository;
-import com.example.InventoryManagement.repository.SubcategoryRepository;
+import com.example.InventoryManagement.repository.ProductComponentRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -18,21 +18,21 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class SubcategoryService {
+public class ProductComponentService {
 
     @Autowired
-    private SubcategoryRepository subcategoryRepository;
+    private ProductComponentRepository subcategoryRepository;
 
     @Autowired
     private RawMaterialRepository rawMaterialRepository;
 
-    public List<SubcategoryDTO> getAllSubcategories() {
+    public List<ProductComponentDTO> getAllSubcategories() {
         return subcategoryRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<SubcategoryDTO> getSubcategoryById(UUID id) {
+    public Optional<ProductComponentDTO> getSubcategoryById(UUID id) {
         return subcategoryRepository.findById(id)
                 .map(this::convertToDTO);
     }
@@ -50,10 +50,10 @@ public class SubcategoryService {
     // return convertToDTO(subcategory);
     // }
 
-    public SubcategoryDTO updateSubcategory(UUID id, Subcategory subcategory) {
+    public ProductComponentDTO updateSubcategory(UUID id, ProductComponent subcategory) {
         if (subcategoryRepository.existsById(id)) {
             subcategory.setId(id);
-            Subcategory updatedSubcategory = subcategoryRepository.save(subcategory);
+            ProductComponent updatedSubcategory = subcategoryRepository.save(subcategory);
             return convertToDTO(updatedSubcategory);
         }
         return null;
@@ -66,8 +66,8 @@ public class SubcategoryService {
         subcategoryRepository.deleteById(id);
     }
 
-    private SubcategoryDTO convertToDTO(Subcategory subcategory) {
-        return new SubcategoryDTO(
+    private ProductComponentDTO convertToDTO(ProductComponent subcategory) {
+        return new ProductComponentDTO(
                 subcategory.getId(),
                 subcategory.getName(),
                 subcategory.getProduct().getId(),

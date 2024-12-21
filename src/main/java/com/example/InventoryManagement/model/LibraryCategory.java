@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "categories")
-public class Category {
+public class LibraryCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -21,10 +21,10 @@ public class Category {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<Product> products;
+    private List<LibraryProduct> products;
 
     // Default constructor
-    public Category() {
+    public LibraryCategory() {
     }
 
     // Getters and Setters
@@ -68,11 +68,11 @@ public class Category {
         this.active = active;
     }
 
-    public List<Product> getProducts() {
+    public List<LibraryProduct> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<LibraryProduct> products) {
         this.products = products;
     }
 }

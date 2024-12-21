@@ -1,7 +1,7 @@
 package com.example.InventoryManagement.controller;
 
 import com.example.InventoryManagement.model.ProductFormulation;
-import com.example.InventoryManagement.model.Product;
+import com.example.InventoryManagement.model.LibraryProduct;
 import com.example.InventoryManagement.service.FormulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,7 @@ public class FormulationController {
     }
 
     @PutMapping("/product/{productId}")
-    public ResponseEntity<Product> updateFormulations(
+    public ResponseEntity<LibraryProduct> updateFormulations(
             @PathVariable UUID productId,
             @RequestBody List<ProductFormulation> formulations) {
         return ResponseEntity.ok(formulationService.updateFormulations(productId, formulations));

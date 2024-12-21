@@ -1,10 +1,10 @@
 package com.example.InventoryManagement.controller;
 
-import com.example.InventoryManagement.dto.CategoryDTO;
-import com.example.InventoryManagement.dto.ProductDTO;
-import com.example.InventoryManagement.model.Category;
-import com.example.InventoryManagement.model.Product;
-import com.example.InventoryManagement.service.CategoryService;
+import com.example.InventoryManagement.dto.LibraryCategoryDTO;
+import com.example.InventoryManagement.dto.LibraryProductDTO;
+import com.example.InventoryManagement.model.LibraryCategory;
+import com.example.InventoryManagement.model.LibraryProduct;
+import com.example.InventoryManagement.service.LibraryCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ import java.util.UUID;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
 @Validated
-public class CategoryController {
+public class LibraryCategoryController {
 
     @Autowired
-    private CategoryService categoryService;
+    private LibraryCategoryService categoryService;
 
-    @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
+    @GetMapping("/library-categories")
+    public ResponseEntity<List<LibraryCategoryDTO>> getAllCategories() {
         try {
-            List<CategoryDTO> categories = categoryService.getAllCategories();
+            List<LibraryCategoryDTO> categories = categoryService.getAllCategories();
             if (categories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -36,8 +36,8 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/categories/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable UUID id) {
+    @GetMapping("/library-categories/{id}")
+    public ResponseEntity<LibraryCategoryDTO> getCategoryById(@PathVariable UUID id) {
         try {
             return categoryService.getCategoryById(id)
                     .map(category -> new ResponseEntity<>(category, HttpStatus.OK))
@@ -47,20 +47,20 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("/categories")
-    public ResponseEntity<CategoryDTO> createCategory(@RequestBody Category category) {
+    @PostMapping("/library-categories")
+    public ResponseEntity<LibraryCategoryDTO> createCategory(@RequestBody LibraryCategory category) {
         try {
-            CategoryDTO newCategory = categoryService.createCategory(category);
+            LibraryCategoryDTO newCategory = categoryService.createCategory(category);
             return new ResponseEntity<>(newCategory, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/categories/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable UUID id, @RequestBody Category category) {
+    @PutMapping("/library-categories/{id}")
+    public ResponseEntity<LibraryCategoryDTO> updateCategory(@PathVariable UUID id, @RequestBody LibraryCategory category) {
         try {
-            CategoryDTO updatedCategory = categoryService.updateCategory(id, category);
+            LibraryCategoryDTO updatedCategory = categoryService.updateCategory(id, category);
             if (updatedCategory != null) {
                 return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
             }
@@ -70,7 +70,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("/categories/{id}")
+    @DeleteMapping("/library-categories/{id}")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable UUID id) {
         try {
             boolean deleted = categoryService.deleteCategory(id);
@@ -83,10 +83,10 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/categories/{id}/products")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID id) {
+    @GetMapping("/library-categories/{id}/products")
+    public ResponseEntity<List<LibraryProductDTO>> getProductsByCategory(@PathVariable UUID id) {
         try {
-            List<ProductDTO> products = categoryService.getProductsByCategory(id);
+            List<LibraryProductDTO> products = categoryService.getProductsByCategory(id);
             if (products.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -96,10 +96,10 @@ public class CategoryController {
         }
     }
 
-    @PostMapping("/categories/{id}/products")
-    public ResponseEntity<ProductDTO> addProductToCategory(@PathVariable UUID id, @RequestBody Product product) {
+    @PostMapping("/library-categories/{id}/products")
+    public ResponseEntity<LibraryProductDTO> addProductToCategory(@PathVariable UUID id, @RequestBody LibraryProduct product) {
         try {
-            ProductDTO addedProduct = categoryService.addProductToCategory(id, product);
+            LibraryProductDTO addedProduct = categoryService.addProductToCategory(id, product);
             if (addedProduct != null) {
                 return new ResponseEntity<>(addedProduct, HttpStatus.CREATED);
             }
@@ -110,11 +110,11 @@ public class CategoryController {
     }
 
     // PUT method for ("/categories/{id}/products/{productId}")
-    @PutMapping("/categories/{id}/products/{productId}")
-    public ResponseEntity<ProductDTO> updateProductToCategory(@PathVariable UUID id, @PathVariable UUID productId,
-            @RequestBody Product product) {
+    @PutMapping("/library-categories/{id}/products/{productId}")
+    public ResponseEntity<LibraryProductDTO> updateProductToCategory(@PathVariable UUID id, @PathVariable UUID productId,
+            @RequestBody LibraryProduct product) {
         try {
-            ProductDTO updatedProduct = categoryService.updateProductToCategory(id, productId, product);
+            LibraryProductDTO updatedProduct = categoryService.updateProductToCategory(id, productId, product);
             if (updatedProduct != null) {
                 return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
             }
@@ -124,7 +124,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("/categories/{id}/products/{productId}")
+    @DeleteMapping("/library-categories/{id}/products/{productId}")
     public ResponseEntity<HttpStatus> removeProductFromCategory(@PathVariable UUID id, @PathVariable UUID productId) {
         try {
             boolean removed = categoryService.removeProductFromCategory(id, productId);

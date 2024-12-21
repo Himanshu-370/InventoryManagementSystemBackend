@@ -11,7 +11,7 @@ public class ProductFormulation {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
+    private LibraryProduct product;
 
     private Long rawMaterialId;
     private double quantity;

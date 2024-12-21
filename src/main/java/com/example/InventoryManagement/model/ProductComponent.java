@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-public class Subcategory {
+public class ProductComponent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,14 +14,14 @@ public class Subcategory {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
+    private LibraryCategory category;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    private LibraryProduct product;
 
     // Default constructor
-    public Subcategory() {
+    public ProductComponent() {
     }
 
     // Getters and Setters
@@ -41,19 +41,19 @@ public class Subcategory {
         this.name = name;
     }
 
-    public Category getCategory() {
+    public LibraryCategory getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(LibraryCategory category) {
         this.category = category;
     }
 
-    public Product getProduct() {
+    public LibraryProduct getProduct() {
         return product;
     }
 
-    public void setProduct(Product product) {
+    public void setProduct(LibraryProduct product) {
         this.product = product;
     }
 }

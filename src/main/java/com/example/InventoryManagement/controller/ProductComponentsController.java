@@ -1,9 +1,9 @@
 package com.example.InventoryManagement.controller;
 
-import com.example.InventoryManagement.dto.SubcategoryDTO;
+import com.example.InventoryManagement.dto.ProductComponentDTO;
 import com.example.InventoryManagement.model.RawMaterial;
-import com.example.InventoryManagement.model.Subcategory;
-import com.example.InventoryManagement.service.SubcategoryService;
+import com.example.InventoryManagement.model.ProductComponent;
+import com.example.InventoryManagement.service.ProductComponentService;
 
 import jakarta.persistence.EntityNotFoundException;
 
@@ -20,15 +20,15 @@ import java.util.UUID;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
 @Validated
-public class SubcategoryController {
+public class ProductComponentsController {
 
     @Autowired
-    private SubcategoryService subcategoryService;
+    private ProductComponentService subcategoryService;
 
-    @GetMapping("/subcategories")
-    public ResponseEntity<List<SubcategoryDTO>> getAllSubcategories() {
+    @GetMapping("/product-components")
+    public ResponseEntity<List<ProductComponentDTO>> getAllSubcategories() {
         try {
-            List<SubcategoryDTO> subcategories = subcategoryService.getAllSubcategories();
+            List<ProductComponentDTO> subcategories = subcategoryService.getAllSubcategories();
             if (subcategories.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -38,8 +38,8 @@ public class SubcategoryController {
         }
     }
 
-    @GetMapping("/subcategories/{id}")
-    public ResponseEntity<SubcategoryDTO> getSubcategoryById(@PathVariable UUID id) {
+    @GetMapping("/product-components/{id}")
+    public ResponseEntity<ProductComponentDTO> getSubcategoryById(@PathVariable UUID id) {
         try {
             return subcategoryService.getSubcategoryById(id)
                     .map(subcategory -> new ResponseEntity<>(subcategory, HttpStatus.OK))
@@ -62,11 +62,11 @@ public class SubcategoryController {
     // }
     // }
 
-    @PutMapping("/subcategories/{id}")
-    public ResponseEntity<SubcategoryDTO> updateSubcategory(@PathVariable UUID id,
-            @RequestBody Subcategory subcategory) {
+    @PutMapping("/product-components/{id}")
+    public ResponseEntity<ProductComponentDTO> updateSubcategory(@PathVariable UUID id,
+            @RequestBody ProductComponent subcategory) {
         try {
-            SubcategoryDTO updatedSubcategory = subcategoryService.updateSubcategory(id, subcategory);
+            ProductComponentDTO updatedSubcategory = subcategoryService.updateSubcategory(id, subcategory);
             if (updatedSubcategory != null) {
                 return new ResponseEntity<>(updatedSubcategory, HttpStatus.OK);
             }
@@ -76,7 +76,7 @@ public class SubcategoryController {
         }
     }
 
-    @DeleteMapping("/subcategories/{id}")
+    @DeleteMapping("/product-components/{id}")
     public ResponseEntity<Void> deleteSubcategory(@PathVariable UUID id) {
         try {
             subcategoryService.deleteSubcategory(id);
@@ -89,7 +89,7 @@ public class SubcategoryController {
         }
     }
 
-    @GetMapping("/subcategories/{id}/rawmaterials")
+    @GetMapping("/product-components/{id}/raw-materials")
     public ResponseEntity<List<RawMaterial>> getMaterialsInSubcategory(@PathVariable UUID id) {
         try {
             List<RawMaterial> materials = subcategoryService.getMaterialsInSubcategory(id);
@@ -102,7 +102,7 @@ public class SubcategoryController {
         }
     }
 
-    @PostMapping("/subcategories/{id}/rawmaterials")
+    @PostMapping("/product-components/{id}/raw-materials")
     public ResponseEntity<RawMaterial> addMaterialToSubcategory(@PathVariable UUID id,
             @RequestBody RawMaterial material) {
         try {
@@ -113,7 +113,7 @@ public class SubcategoryController {
         }
     }
 
-    @DeleteMapping("/subcategories/{id}/rawmaterials/{rawmaterialId}")
+    @DeleteMapping("/product-components/{id}/raw-materials/{rawMaterialId}")
     public ResponseEntity<Void> removeMaterialFromSubcategory(@PathVariable UUID id, @PathVariable UUID materialId) {
         try {
             subcategoryService.removeMaterialFromSubcategory(id, materialId);

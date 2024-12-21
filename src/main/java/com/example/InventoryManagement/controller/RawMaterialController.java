@@ -21,7 +21,7 @@ public class RawMaterialController {
     @Autowired
     private RawMaterialService rawMaterialService;
 
-    @GetMapping("/rawmaterials")
+    @GetMapping("/raw-materials")
     public ResponseEntity<List<RawMaterialDTO>> getAllRawMaterials() {
         List<RawMaterialDTO> rawMaterials = rawMaterialService.getAllRawMaterials().stream()
                 .map(this::convertToDTO)
@@ -29,21 +29,21 @@ public class RawMaterialController {
         return ResponseEntity.ok(rawMaterials);
     }
 
-    @GetMapping("/rawmaterials/{id}")
+    @GetMapping("/raw-materials/{id}")
     public ResponseEntity<RawMaterialDTO> getRawMaterialById(@PathVariable UUID id) {
         Optional<RawMaterial> rawMaterial = rawMaterialService.getRawMaterialById(id);
         return rawMaterial.map(material -> ResponseEntity.ok(convertToDTO(material)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @PostMapping("/rawmaterials")
+    @PostMapping("/raw-materials")
     public ResponseEntity<RawMaterialDTO> createRawMaterial(@RequestBody RawMaterialDTO rawMaterialDTO) {
         RawMaterial rawMaterial = convertToEntity(rawMaterialDTO);
         RawMaterial createdRawMaterial = rawMaterialService.createRawMaterial(rawMaterial);
         return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(createdRawMaterial));
     }
 
-    @PutMapping("/rawmaterials/{id}")
+    @PutMapping("/raw-materials/{id}")
     public ResponseEntity<RawMaterialDTO> updateRawMaterial(@PathVariable UUID id,
             @RequestBody RawMaterialDTO rawMaterialDTO) {
         RawMaterial rawMaterial = convertToEntity(rawMaterialDTO);
@@ -52,7 +52,7 @@ public class RawMaterialController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @DeleteMapping("/rawmaterials/{id}")
+    @DeleteMapping("/raw-materials/{id}")
     public ResponseEntity<Void> deleteRawMaterial(@PathVariable UUID id) {
         boolean isDeleted = rawMaterialService.deleteRawMaterial(id);
         if (isDeleted) {

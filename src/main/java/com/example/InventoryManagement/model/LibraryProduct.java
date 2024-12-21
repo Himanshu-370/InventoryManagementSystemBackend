@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-public class Product {
+public class LibraryProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -26,7 +26,7 @@ public class Product {
     private String storageConditions;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Subcategory> subcategories;
+    private List<ProductComponent> subcategories;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductFormulation> formulations;
@@ -34,10 +34,10 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonBackReference
-    private Category category;
+    private LibraryCategory category;
 
     // Default constructor
-    public Product() {
+    LibraryProduct() {
     }
 
     // Getters and Setters
@@ -161,19 +161,19 @@ public class Product {
         this.formulations = formulations;
     }
 
-    public void setCategory(Category category) {
+    public void setCategory(LibraryCategory category) {
         this.category = category;
     }
 
-    public Category getCategory() {
+    public LibraryCategory getCategory() {
         return category;
     }
 
-    public List<Subcategory> getSubcategories() {
+    public List<ProductComponent> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(List<Subcategory> subcategories) {
+    public void setSubcategories(List<ProductComponent> subcategories) {
         this.subcategories = subcategories;
     }
 }

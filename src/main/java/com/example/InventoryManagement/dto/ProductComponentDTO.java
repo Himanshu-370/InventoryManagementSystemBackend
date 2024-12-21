@@ -2,18 +2,18 @@ package com.example.InventoryManagement.dto;
 
 import java.util.UUID;
 
-public class SubcategoryDTO {
+public class ProductComponentDTO {
     private UUID id;
     private String name;
     private UUID productId;
     private UUID categoryId;
 
     // Default constructor
-    public SubcategoryDTO() {
+    public ProductComponentDTO() {
     }
 
     // Constructor to initialize fields
-    public SubcategoryDTO(UUID id, String name, UUID productId, UUID categoryId) {
+    public ProductComponentDTO(UUID id, String name, UUID productId, UUID categoryId) {
         this.id = id;
         this.name = name;
         this.productId = productId;

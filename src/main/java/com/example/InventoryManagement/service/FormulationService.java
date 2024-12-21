@@ -1,7 +1,7 @@
 package com.example.InventoryManagement.service;
 
 import com.example.InventoryManagement.model.ProductFormulation;
-import com.example.InventoryManagement.model.Product;
+import com.example.InventoryManagement.model.LibraryProduct;
 import com.example.InventoryManagement.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.UUID;
 public class FormulationService {
 
     @Autowired
-    private ProductService productService;
+    private LibraryProductService productService;
 
     @Autowired
     private RawMaterialService rawMaterialService;
@@ -26,12 +26,12 @@ public class FormulationService {
 
     public List<ProductFormulation> getFormulationsByProductId(UUID productId) {
         return productService.getProductById(productId)
-                .map(Product::getFormulations)
+                .map(LibraryProduct::getFormulations)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
-    public Product updateFormulations(UUID productId, List<ProductFormulation> formulations) {
-        Product product = productService.getProductById(productId)
+    public LibraryProduct updateFormulations(UUID productId, List<ProductFormulation> formulations) {
+        LibraryProduct product = productService.getProductById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
         // Validate raw materials exist
