@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "rawMaterialId": 1,
+        "quantity": 500.0,
+        "price": 450.00,
+        "priceAfterConversion": 450.00,
+        "notes": "Active ingredient"
+    },
+    {
+        "id": 2,
+        "rawMaterialId": 3,
+        "quantity": 100.0,
+        "price": 150.00,
+        "priceAfterConversion": 150.00,
+        "notes": "Binding agent"
+    },
+    {
+        "id": 3,
+        "rawMaterialId": 5,
+        "quantity": 50.0,
+        "price": 75.00,
+        "priceAfterConversion": 75.00,
+        "notes": "Disintegrant"
+    }
+]
